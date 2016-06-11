@@ -23,14 +23,11 @@ def analyze_messages(messages, sesh_id):
     hot = 0
     cold = 0
     for msg in messages:
-        print msg.direction
         if msg.direction == "inbound":
-            print "YAY"
             if msg.date_created > start_time:
-                print "MOARE AYYAY"
-                if "hot" in msg.body:
+                if "hot" in msg.body.lower():
                     hot += 1
-                elif "not" in msg.body:
+                elif "cold" in msg.body.lower():
                     cold += 1
     result = {
         "hot": hot,
@@ -43,7 +40,7 @@ def analyze_messages(messages, sesh_id):
 @app.route("/submit/", methods=['GET', 'POST'])
 def submit(sesh_id=None):
     resp = twilio.twiml.Response()
-    resp.message("Thanks for your input! ")
+    resp.message("Thanks for your input!")
     return str(resp)
 
 
@@ -58,14 +55,10 @@ def start_poll(session_id=None):
 
 @app.route("/get_results/", methods=['GET', 'POST'])
 def get_results():
-    # print sesh_id
-    # print start_time
     # get all messages from today
     messages = client.messages.list()
     if sesh_id and start_time:
         result = analyze_messages(messages, sesh_id)
-        print "THARARRARAR"
-        print result
         return json.dumps(result)
     else:
         return "Please establish session"
