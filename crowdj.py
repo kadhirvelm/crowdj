@@ -58,8 +58,10 @@ def get_results():
     # print start_time
     # get all messages from today
     messages = client.messages.list(date_sent=dt.utcnow())
+    print str(messages)
     if sesh_id and start_time:
         result = analyze_messages(messages, sesh_id)
+        print result
         return json.dumps(result)
     else:
         return "Please establish session"
