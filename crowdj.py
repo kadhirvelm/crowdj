@@ -57,10 +57,12 @@ def get_results():
     # print sesh_id
     # print start_time
     # get all messages from today
-    messages = client.messages.list(date_sent=dt.utcnow())
+    messages = client.messages.list()
+    print "HELLOOLOLOLOLO"
     print str(messages)
     if sesh_id and start_time:
         result = analyze_messages(messages, sesh_id)
+        print "THARARRARAR"
         print result
         return json.dumps(result)
     else:
