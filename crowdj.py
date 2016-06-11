@@ -42,7 +42,7 @@ def submit(sesh_id=None):
     return str(resp)
 
 
-@app.route("/start_poll/<id>/", methods=['GET', 'POST'])
+@app.route("/start_poll/<sesh_id>/", methods=['GET', 'POST'])
 def start_poll(sesh_id=None):
     sesh_id = sesh_id
     start_time = dt.utcnow()
