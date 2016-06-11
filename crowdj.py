@@ -46,7 +46,7 @@ def submit(sesh_id=None):
 def start_poll(sesh_id=None):
     sesh_id = sesh_id
     start_time = dt.utcnow()
-
+    return sesh_id
 
 @app.route("/get_results/", methods=['GET', 'POST'])
 def get_results():
@@ -66,6 +66,8 @@ def stop_poll():
     # Reset start time and sesh_id
     start_time = None
     sesh_id = None
+    return 0
+
 
 if __name__ == "__main__":
     app.run(debug=True)
