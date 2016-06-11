@@ -37,6 +37,7 @@ def analyze_messages(messages, sesh_id):
         "cold": cold,
         "sesh_id": sesh_id
     }
+    return result
 
 
 @app.route("/submit/", methods=['GET', 'POST'])
