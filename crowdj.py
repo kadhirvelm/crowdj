@@ -23,8 +23,11 @@ def analyze_messages(messages, sesh_id):
     hot = 0
     cold = 0
     for msg in messages:
+        print msg.direction
         if msg.direction == "inbound":
+            print "YAY"
             if msg.date_created > start_time:
+                print "MOARE AYYAY"
                 if "hot" in msg.body:
                     hot += 1
                 elif "not" in msg.body:
@@ -58,8 +61,6 @@ def get_results():
     # print start_time
     # get all messages from today
     messages = client.messages.list()
-    print "HELLOOLOLOLOLO"
-    print str(messages)
     if sesh_id and start_time:
         result = analyze_messages(messages, sesh_id)
         print "THARARRARAR"
