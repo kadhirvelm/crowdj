@@ -16,6 +16,7 @@ global start_time
 global sesh_id
 
 start_time = None
+sesh_id = None
 
 
 def analyze_messages(messages, sesh_id):
@@ -29,10 +30,10 @@ def analyze_messages(messages, sesh_id):
                 elif "not" in msg.body:
                     cold += 1
     result = {
-    		  "hot": hot,
-    		  "cold": cold,
-    		  "sesh_id": sesh_id
-    		  }
+        "hot": hot,
+        "cold": cold,
+        "sesh_id": sesh_id
+    }
 
 
 @app.route("/submit/", methods=['GET', 'POST'])
@@ -42,18 +43,26 @@ def submit(sesh_id=None):
     return str(resp)
 
 
-@app.route("/start_poll/<sesh_id>/", methods=['GET', 'POST'])
-def start_poll(sesh_id=None):
-    sesh_id = sesh_id
+@app.route("/start_poll/<session_id>/", methods=['GET', 'POST'])
+def start_poll(session_id=None):
+    global start_time
+    global sesh_id
+    sesh_id = session_id
     start_time = dt.utcnow()
     return sesh_id
 
+
 @app.route("/get_results/", methods=['GET', 'POST'])
 def get_results():
+    # print sesh_id
+    # print start_time
     # get all messages from today
     messages = client.messages.list(date_sent=dt.utcnow())
-    result = analyze_messages(messages, sesh_id)
-    return json.dumps(result)
+    if sesh_id and start_time:
+        result = analyze_messages(messages, sesh_id)
+        return json.dumps(result)
+    else:
+        return "Please establish session"
 
 
 @app.route("/stop_poll/", methods=['GET', 'POST'])
@@ -64,9 +73,11 @@ def stop_poll():
         client.messages.delete(msg.sid)
 
     # Reset start time and sesh_id
+    global start_time
+    global sesh_id
     start_time = None
     sesh_id = None
-    return 0
+    return "Stopped"
 
 
 if __name__ == "__main__":
